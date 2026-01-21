@@ -23,3 +23,10 @@ class Businessmen(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
     date_joined = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        self.user_id.is_businessman = True
+        self.user_id.save()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.user_id.first_name + " - Biznesmen"
