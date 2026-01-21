@@ -17,6 +17,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product_images/%Y/%m/%d/')
     maxsulot_soni = models.IntegerField(default=0)
     maxsulot_birligi = models.CharField(max_length=10, choices=UNIT_CHOICES, default='dona')
+    date_joined = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name

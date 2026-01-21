@@ -7,7 +7,7 @@ from django.utils.text import slugify
 class Business(models.Model):
     business_owner = models.ForeignKey(Businessmen, on_delete=models.CASCADE)
     business_name = models.CharField(max_length=200)
-    business_type = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='business_logos/%Y/%m/%d/', null=True, blank=True)
     business_info = models.TextField()
     date_joined = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
@@ -22,8 +22,8 @@ class Business(models.Model):
 
 class Categories(models.Model):
     name = models.CharField(max_length=300)
-    businessman = models.ForeignKey(Businessmen, null=True, on_delete=models.PROTECT)
-    business = models.ForeignKey(Business, null=True, on_delete=models.PROTECT)
+    parent_id = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name

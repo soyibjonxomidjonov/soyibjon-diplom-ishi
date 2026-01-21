@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page | Premium Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{% static 'css/main_page.css' %}" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <div class="categories">
+        <div class="cat-card active">Hammasi</div>
+        {% for category in categories %}
+        <div class="cat-card">{{ category.name }}</div>
+        {% endfor %}
+
+    </div>
+
+    {% for product in products %}
+    <div class="product-grid">
+
+        <div class="product-card">
+            <div class="image-wrapper">
+                <div class="price-badge">{{product.price}} so'm</div>
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                <p>Rasm yuklanmagan</p>
+                {% endif %}
+                <div class="overlay">
+                    <button class="add-btn">Savatga qo'shish</button>
+                </div>
+            </div>
+            <div class="info">
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.category }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <h3> Kechirasiz hozircha maxsulotlar mavjud emas </h3>
+
+        {% endfor %}
+
+
+    </div>
+</div>
+
+</body>
+</html>
