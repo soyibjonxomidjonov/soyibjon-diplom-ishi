@@ -20,11 +20,16 @@ class Business(models.Model):
     def __str__(self):
         return self.business_name
 
-class Categories(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=300)
-    parent_id = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        full_path = [self.name]
+        k = self.parent
+        while k is not None:
+            full_path.append(k.name)
+            k = k.parent
+        return ' -> '.join(full_path[::-1])
 

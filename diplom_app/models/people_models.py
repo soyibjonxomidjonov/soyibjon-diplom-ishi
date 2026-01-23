@@ -9,6 +9,7 @@ phone_regex = RegexValidator(
 
 class Users(models.Model):
     first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     date_joined = models.DateTimeField(auto_now_add=True)
     username = models.CharField(max_length=100, unique=True)
     password = models.CharField(max_length=100)
