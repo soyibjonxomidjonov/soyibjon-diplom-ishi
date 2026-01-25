@@ -60,10 +60,10 @@ class ProductForm(forms.ModelForm):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.all().order_by('name')
-        self.fields['category'].empty_label = "---- Kategoriyani tanlang---"
+        self.fields['category'].empty_label = "Kategoriyani tanlang ^"
         if user:
             self.fields['business_turi'].queryset = Business.objects.filter(business_owner=user)
-        self.fields['business_turi'].empty_label = "---- Biznes turini tanlang---"
+        self.fields['business_turi'].empty_label = "Biznes turini tanlang ^"
 
 
 

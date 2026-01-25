@@ -1,5 +1,5 @@
 from django import forms
-from diplom_app.models import Businessmen, Users
+from diplom_app.models import Users
 
 
 

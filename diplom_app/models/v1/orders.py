@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from .people_models import Users
-from .products import Product
+from diplom_app.models.v1.people_models import Users
+from diplom_app.models.v1.products import Product
 
 UNIT_CHOICES = [
     ('Zakaz', 'Zakaz'),

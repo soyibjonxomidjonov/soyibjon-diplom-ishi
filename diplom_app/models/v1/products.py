@@ -1,5 +1,5 @@
 from django.db import models
-from .categories import Categories, Business
+from diplom_app.models import Category, Business
 
 UNIT_CHOICES = [
     ('kg', 'Kilogramm'),
@@ -10,7 +10,7 @@ UNIT_CHOICES = [
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
-    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     business_turi = models.ForeignKey(Business, on_delete=models.CASCADE)
     info = models.TextField()
     price = models.IntegerField(blank=False, null=False)

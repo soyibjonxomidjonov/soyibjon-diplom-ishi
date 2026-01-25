@@ -1,5 +1,5 @@
 from django.db import models
-from .people_models import Businessmen
+from diplom_app.models.v1.people_models import Businessmen
 from django.utils.text import slugify
 
 

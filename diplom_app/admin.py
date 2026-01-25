@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Categories, Product, Users, Orders, Business, Businessmen, OrderItems
+from diplom_app.models import Category, Product, Users, Orders, Business, Businessmen, OrderItems
 # Register your models here.
-admin.site.register(Categories)
+admin.site.register(Category)
 admin.site.register(Product)
 admin.site.register(Users)
 admin.site.register(Orders)
