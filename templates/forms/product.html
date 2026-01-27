@@ -1,0 +1,94 @@
+{% extends 'form_base.html' %}
+
+{% block title %}Mahsulot Qo'shish | Cyber Market{% endblock %}
+
+{% block head_title %}Yangi maxsulot{% endblock %}
+
+{% block content %}
+<div class="cyber-card wide-card">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="field-wrapper">
+            <label>Qaysi do'koningizga qo'shilsin?</label>
+            <select name="shop_id" class="cyber-select" required>
+                {% for shop in owner_shops %}
+                    <option value="{{ shop.id }}">{{ shop.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="product-grid">
+            {% for field in form %}
+                <div class="field-wrapper {% if field.name == 'description' %}full-width{% endif %}">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <span class="error-msg">{{ field.errors.0 }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="action-btn">MAHSULOTNI SAQLASH</button>
+    </form>
+
+    <div class="footer-link">
+        <a href="/dashboard/">← Dashboardga qaytish</a>
+    </div>
+</div>
+
+<style>
+    /* Mahsulot uchun formani kengaytiramiz */
+    .wide-card {
+        width: 650px !important; /* "Ozg'in" formadan ko'ra kengroq */
+        max-width: 95%;
+    }
+
+    /* Inputlarni 2 ustunga bo'lamiz */
+    .product-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 50/50 bo'lish */
+        gap: 15px 25px;
+        margin-top: 20px;
+    }
+
+    /* Description (textarea) butun kenglikni egallashi uchun */
+    .full-width {
+        grid-column: span 2;
+    }
+
+    /* Bizning maxsus select dizaynimiz */
+    .cyber-select {
+        width: 100%;
+        padding: 12px;
+        background: rgba(0, 242, 255, 0.05);
+        border: 1px solid rgba(0, 242, 255, 0.3);
+        border-radius: 10px;
+        color: #00f2ff;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 16px;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .cyber-select option {
+        background: #0f172a;
+        color: white;
+    }
+
+    .error-msg {
+        color: #ff4d4d;
+        font-size: 12px;
+        margin-top: 5px;
+        display: block;
+    }
+
+    /* Rasm yuklash (File input) tugmasini to'g'irlash */
+    input[type="file"] {
+        padding: 10px;
+        font-size: 14px;
+        color: #94a3b8;
+    }
+</style>
+{% endblock %}

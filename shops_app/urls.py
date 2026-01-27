@@ -1,7 +1,13 @@
 from django.urls import path
+from shops_app.views import form_view, main
 
 
-
+urlpatterns = [
+    path('', main.main_page, name='login'),
+    path('login/', form_view.login, name='login'),
+    path('logout/', form_view.logout_page, name="logout_page"),
+    path('product/', form_view.product, name='product'),
+]
 
 
 

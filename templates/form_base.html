@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cyber Market{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --neon-cyan: #00f2ff;
+            --neon-violet: #bc13fe;
+            --bg-dark: #020617;
+        }
+
+        body {
+            /* Agar rasm yuklanmasa, quyuq ko'k-qora fon turadi */
+            background-color: var(--bg-dark);
+            /* Yangi, tiniqroq koinot rasmi */
+            background-image: url('https://w0.peakpx.com/wallpaper/429/180/HD-wallpaper-night-stars-mountains-sky-cosmos.jpg');
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        /* Forma konteyneri - Yanada ozg'inroq */
+        .cyber-card {
+            background: rgba(15, 23, 42, 0.8); /* To'q va shaffof */
+            width: 350px; /* Ozg'inlikni kuchaytirdik */
+            padding: 45px 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(0, 242, 255, 0.25);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px); /* Tiniqroq bo'lishi uchun blurni kamaytirdik */
+            position: relative;
+            z-index: 10;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-cyan);
+            text-align: center;
+            font-size: 20px;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        .field-wrapper { margin-bottom: 25px; }
+
+        .field-wrapper label {
+            color: #94a3b8;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Dinamik inputlar */
+        .field-wrapper input {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .field-wrapper input:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            background: rgba(0, 242, 255, 0.05);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 16px;
+            margin-top: 15px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-violet));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.4s;
+        }
+
+        .action-btn:hover {
+            box-shadow: 0 0 25px rgba(188, 19, 254, 0.5);
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+
+        .footer-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 13px;
+        }
+
+        .footer-link a {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: 0.3s;
+        }
+
+        .footer-link a:hover { opacity: 1; text-shadow: 0 0 5px var(--neon-cyan); }
+    </style>
+</head>
+<body>
+
+    <div class="cyber-card">
+        <h2>{% block head_title %}LOGIN{% endblock %}</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="field-wrapper">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="action-btn">
+                {% block btn_text %}KIRISH{% endblock %}
+            </button>
+        </form>
+
+        <div class="footer-link">
+            {% block extra_links %}{% endblock %}
+        </div>
+    </div>
+
+</body>
+</html>
