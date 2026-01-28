@@ -1,14 +1,24 @@
 from django.urls import path
-from shops_app.views import form_view, main
+from shops_app.views import form_view, main, login, user_view
 
 
 urlpatterns = [
     path('', main.main_page, name='main_page'),
-    path('login/', form_view.login, name='login'),
-    path('register/', form_view.register, name='register'),
-    path('logout/', form_view.logout_page, name="logout_page"),
+
+    # Login, logout and register urls
+    path('login/', login.login, name='login'),
+    path('logout/', login.logout_def, name="logout_page"),
+
+    # Saved form urls
+    path('register/', login.register, name='register'),
     path('product_add/', form_view.product_add, name='product_add'),
     path('shop_add/', form_view.shop_add, name='shop_add'),
+
+    # Project User-view urls
+    path('shop/<slug:shop_slug>/', user_view.view_shop_page, name='shop'),
+    path('shop/<slug:shop_slug>/<int:product_id>/', user_view.view_product_page, name='shop_product'),
+    path('shop/<slug:shop_slug>/add-to-basket/<int:product_id>/', user_view.add_to_basket, name='add_to_basket'),
+    path('shop/<slug:shop_slug>/order', form_view.shop_add, name='shop_order'),
 ]
 
 

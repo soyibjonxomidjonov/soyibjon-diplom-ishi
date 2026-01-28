@@ -4,7 +4,7 @@ from django.utils.text import slugify
 
 
 class Shop(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owners")
     name = models.CharField(max_length=200, blank=False, null=False)
     description = models.TextField(blank=True, null=True)
     address = models.CharField(max_length=300, blank=True, null=True)
@@ -12,6 +12,7 @@ class Shop(models.Model):
     chat_id = models.CharField(max_length=100, blank=True, null=True)
     slug = models.CharField(max_length=200, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
 
     def save(self, *args, **kwargs):
         if not self.slug:

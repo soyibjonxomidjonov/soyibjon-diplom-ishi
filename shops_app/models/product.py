@@ -11,7 +11,7 @@ UNIT_CHOICES = [
 ]
 
 class Product(models.Model):
-    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='products')
     name = models.CharField(max_length=200, blank=False, null=False)
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='products/%Y/%m/%d/', blank=False, null=False)
