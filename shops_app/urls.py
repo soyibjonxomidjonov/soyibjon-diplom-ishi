@@ -15,10 +15,11 @@ urlpatterns = [
     path('shop_add/', form_view.shop_add, name='shop_add'),
 
     # Project User-view urls
-    path('shop/<slug:shop_slug>/', user_view.view_shop_page, name='shop'),
-    path('shop/<slug:shop_slug>/<int:product_id>/', user_view.view_product_page, name='shop_product'),
     path('shop/<slug:shop_slug>/add-to-basket/<int:product_id>/', user_view.add_to_basket, name='add_to_basket'),
+    path('shop/<slug:shop_slug>/<int:product_id>/', user_view.view_product_page, name='shop_product'),
     path('shop/<slug:shop_slug>/order', form_view.shop_add, name='shop_order'),
+    path('shop/<slug:shop_slug>/', user_view.view_shop_page, name='shop'),
+
 ]
 
 

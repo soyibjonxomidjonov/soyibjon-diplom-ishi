@@ -3,164 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ product.name }} | {{ shop.name }}</title>
+    <title>{{ shop.name }} | Kiber Do'kon</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --neon: #00f2ff; --bg: #0a0a0c; }
-        body { background: var(--bg); color: #e2e8f0; font-family: 'Segoe UI', sans-serif; }
-        .neon-border { border: 1px solid rgba(0, 242, 255, 0.3); }
-        .neon-btn {
-            background: linear-gradient(45deg, #008080, #00f2ff);
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
-        }
-        .cart-sidebar {
-            transition: transform 0.3s ease-in-out;
-            background: #111114;
-            border-left: 2px solid var(--neon);
-        }
+        body { background-color: #0a0a0c; color: white; font-family: 'Inter', sans-serif; }
+        .cyber-card { background: #111114; border: 1px solid rgba(0, 242, 255, 0.1); transition: 0.3s; }
+        .cyber-card:hover { border-color: #00f2ff; transform: translateY(-5px); box-shadow: 0 0 20px rgba(0, 242, 255, 0.1); }
+        .cart-sidebar { transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); background: #0d0d0f; border-left: 2px solid #00f2ff; z-index: 1000; }
         .hidden-cart { transform: translateX(100%); }
+        /* Scrollbar dizayni */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0a0a0c; }
+        ::-webkit-scrollbar-thumb { background: #00f2ff; border-radius: 10px; }
     </style>
 </head>
-<body class="min-h-screen">
+<body>
 
-    <header class="p-4 border-b border-gray-800 bg-black/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <a href="{% url 'shop' shop.slug %}" class="text-gray-400 hover:text-cyan-400 transition">
-                <i class="fa-solid fa-arrow-left text-xl"></i>
-            </a>
-            <h1 class="text-xl font-bold tracking-widest text-white uppercase neon-text">{{ shop.name }}</h1>
-            <button onclick="toggleCart()" class="relative text-cyan-400 hover:scale-110 transition">
-                <i class="fa-solid fa-cart-shopping text-2xl"></i>
-                <span id="cart-badge" class="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                    {{ cart_items|length }}
-                </span>
-            </button>
+    <header class="p-4 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-black/95 backdrop-blur-sm z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-cyan-500 rounded-lg flex items-center justify-center font-black text-black shadow-[0_0_15px_#06b6d4]">
+                {{ shop.name|slice:":1"|upper }}
+            </div>
+            <h1 class="text-xl font-black tracking-widest uppercase text-white">{{ shop.name }}</h1>
         </div>
+
+        <button onclick="toggleCart()" class="relative text-cyan-400 p-2 hover:scale-110 transition">
+            <i class="fa-solid fa-cart-shopping text-2xl"></i>
+            <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-bold border-2 border-black">
+                {{ cart_items|length }}
+            </span>
+        </button>
     </header>
 
-    <main class="max-w-6xl mx-auto p-4 pt-6 md:pt-12">
-        <div class="flex flex-col md:flex-row gap-10">
+    <div class="max-w-2xl mx-auto mt-8 px-4">
+        <div class="relative group">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-cyan-400 transition"></i>
+            <input type="text" id="searchInput" placeholder="Mahsulotlarni qidirish..."
+                   class="w-full bg-gray-900/50 border border-gray-800 rounded-2xl py-4 pl-12 pr-4 focus:border-cyan-500 outline-none text-white transition-all focus:ring-1 focus:ring-cyan-500">
+        </div>
+    </div>
 
-            <div class="w-full md:w-1/2">
-                <div class="neon-border rounded-2xl overflow-hidden bg-gray-900 flex justify-center items-center p-4">
-                    {% if product.image %}
-                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="max-w-full h-auto max-h-[500px] object-contain rounded-lg">
+    <main class="max-w-7xl mx-auto p-6 mt-4">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="productGrid">
+            {% for p in products %}
+            <div class="cyber-card rounded-2xl overflow-hidden flex flex-col h-full product-item" data-name="{{ p.name|lower }}">
+                <div class="aspect-[3/4] bg-gray-900 relative group overflow-hidden">
+                    {% if p.image %}
+                        <img src="{{ p.image.url }}" alt="{{ p.name }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                     {% else %}
-                        <div class="h-64 flex items-center justify-center text-gray-600">Rasm mavjud emas</div>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="w-full md:w-1/2 flex flex-col">
-                <h2 class="text-3xl md:text-4xl font-extrabold mb-4 text-white uppercase">{{ product.name }}</h2>
-
-                <div class="flex items-center gap-4 mb-8">
-                    <span class="text-3xl font-bold text-cyan-400">{{ product.price }} so'm</span>
-
-                    {% if product.stock > 0 %}
-                        <span class="text-xs font-bold bg-green-900/40 text-green-400 px-3 py-1 rounded-full border border-green-700">
-                            Zaxirada: {{ product.stock }} dona
-                        </span>
-                    {% else %}
-                        <span class="text-xs font-bold bg-red-900/40 text-red-400 px-3 py-1 rounded-full border border-red-700">
-                            Tugagan
-                        </span>
+                        <div class="w-full h-full flex items-center justify-center text-gray-700 italic">Rasm mavjud emas</div>
                     {% endif %}
                 </div>
 
-                <div class="bg-gray-900/50 p-6 rounded-2xl border border-gray-800 mb-8">
-                    <h4 class="text-gray-500 uppercase text-xs font-bold mb-3 tracking-widest">Tavsif</h4>
-                    <p class="text-gray-300 leading-relaxed text-sm md:text-base">
-                        {{ product.description|linebreaks }}
-                    </p>
-                </div>
+                <div class="p-4 flex flex-col flex-grow bg-gradient-to-b from-transparent to-black/50">
+                    <h3 class="font-bold text-white text-sm md:text-base mb-1 truncate">{{ p.name }}</h3>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-cyan-400 font-black text-lg">{{ p.price }} so'm</span>
+                    </div>
 
-                {% if product.stock > 0 %}
-                <button onclick="addToCart('{{ product.id }}')"
-                        class="neon-btn w-full py-5 rounded-2xl text-white font-black text-xl hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-4">
-                    <i class="fa-solid fa-cart-plus"></i> SAVATGA QO'SHISH
-                </button>
-                {% else %}
-                <button disabled class="w-full py-5 rounded-2xl bg-gray-800 text-gray-500 font-bold text-xl cursor-not-allowed">
-                    MAHSULOT TUGAGAN
-                </button>
-                {% endif %}
+                    <button onclick="addToCart('{{ p.id }}')"
+                            class="mt-auto w-full bg-cyan-900/20 hover:bg-cyan-500 text-cyan-400 hover:text-white border border-cyan-500/30 py-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-2 uppercase tracking-tighter">
+                        <i class="fa-solid fa-plus"></i> Savatga qo'shish
+                    </button>
+                </div>
             </div>
+            {% endfor %}
         </div>
     </main>
 
-    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full md:w-96 z-[100] cart-sidebar hidden-cart p-6 shadow-2xl flex flex-col">
+    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full md:w-[400px] cart-sidebar hidden-cart p-6 flex flex-col shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
         <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-black text-cyan-400 italic">SAVAT</h2>
-            <button onclick="toggleCart()" class="text-gray-500 hover:text-white text-4xl">&times;</button>
+            <h2 class="text-xl font-black text-cyan-400 italic tracking-widest uppercase">Savatingiz</h2>
+            <button onclick="toggleCart()" class="text-3xl text-gray-500 hover:text-white transition">&times;</button>
         </div>
 
-        <div id="cartContent" class="flex-grow overflow-y-auto pr-2 space-y-4">
+        <div class="flex-grow overflow-y-auto space-y-4 pr-2 custom-scroll">
             {% for item in cart_items %}
-            <div class="flex justify-between items-center bg-gray-900/40 p-3 rounded-xl border border-gray-800">
-                <div class="flex-grow">
-                    <h4 class="text-sm font-bold text-white truncate w-40">{{ item.product.name }}</h4>
-                    <p class="text-xs text-cyan-500">{{ item.quantity }} dona x {{ item.product.price }}</p>
+                <div class="bg-gray-900/80 p-4 rounded-2xl border border-gray-800 flex justify-between items-center hover:border-cyan-500/50 transition">
+                    <div class="flex-grow">
+                        <h5 class="text-sm font-bold text-white mb-1 uppercase tracking-tight">{{ item.product.name }}</h5>
+                        <div class="flex items-center gap-3">
+                            <span class="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/20">
+                                {{ item.quantity }} dona
+                            </span>
+                            <span class="text-[10px] text-gray-500">x {{ item.product.price }}</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-black text-white">{{ item.item_total }} so'm</p>
+                    </div>
                 </div>
-                <div class="text-right">
-                    <p class="text-sm font-black text-white">{{ item.item_total }}</p>
-                </div>
-            </div>
             {% empty %}
-            <div class="h-full flex flex-col items-center justify-center text-gray-600">
-                <i class="fa-solid fa-basket-shopping text-5xl mb-4"></i>
-                <p>Savat bo'sh</p>
-            </div>
+                <div class="flex flex-col items-center justify-center h-full opacity-20">
+                    <i class="fa-solid fa-cart-ghost text-6xl mb-4"></i>
+                    <p class="italic text-sm">Savat hozircha bo'sh...</p>
+                </div>
             {% endfor %}
         </div>
 
         <div class="mt-auto pt-6 border-t border-gray-800">
             <div class="flex justify-between items-end mb-6">
-                <span class="text-gray-500 font-bold uppercase text-xs">Jami summa:</span>
+                <span class="text-gray-500 text-xs font-bold uppercase tracking-widest">Jami summa:</span>
                 <span class="text-2xl font-black text-cyan-400">{{ total_price }} so'm</span>
             </div>
-            <button class="w-full bg-green-600 hover:bg-green-500 text-white py-4 rounded-xl font-black text-lg shadow-lg shadow-green-900/20 transition-all">
-                BUYURTMA BERISH
+            <button class="w-full bg-green-600 hover:bg-green-500 text-white py-4 rounded-2xl font-black text-sm transition-all shadow-[0_10px_20px_rgba(22,163,74,0.2)] active:scale-95 uppercase tracking-widest">
+                Buyurtma berish
             </button>
         </div>
     </div>
 
     <script>
+        // Sidebar ochish/yopish
         function toggleCart() {
             document.getElementById('cartSidebar').classList.toggle('hidden-cart');
         }
 
+        // Savatga qo'shish (AJAX)
         function addToCart(productId) {
-            // URL ni to'g'ri shakllantirish: shop_slug ni o'zgaruvchidan olamiz
             const shopSlug = "{{ shop.slug }}";
             const url = `/shop/${shopSlug}/add-to-basket/${productId}/`;
-
-            console.log("Yuborilayotgan URL:", url); // Konsolda 0 emas, haqiqiy ID chiqishi kerak
 
             fetch(url, {
                 method: 'GET',
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
-            .then(response => {
-                if (!response.ok) throw new Error('Tarmoq xatosi yoki 404');
-                return response.json();
-            })
+            .then(res => res.json())
             .then(data => {
-                if (data.status === 'ok') {
-                    // Badge raqamini o'zgartirish
+                if(data.status === 'ok') {
+                    // Badge sonini yangilash
                     document.getElementById('cart-badge').innerText = data.cart_count;
-                    // Savatni ochish
-                    document.getElementById('cartSidebar').classList.remove('hidden-cart');
-                    // Ma'lumotlar yangilanishi uchun sahifani reload qilamiz
+                    // Ma'lumotlar sessiyadan yangilanishi uchun reload
                     location.reload();
                 }
             })
-            .catch(error => {
-                console.error('Xatolik:', error);
-                alert("Xatolik yuz berdi. Konsolni tekshiring.");
-            });
+            .catch(err => console.error("Xato:", err));
         }
+
+        // Qidiruv funksiyasi
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('.product-item').forEach(item => {
+                const name = item.getAttribute('data-name');
+                item.style.display = name.includes(term) ? 'flex' : 'none';
+            });
+        });
     </script>
 </body>
 </html>

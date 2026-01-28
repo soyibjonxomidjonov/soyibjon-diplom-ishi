@@ -9,7 +9,7 @@ def view_shop_page(request, shop_slug):
     cart_data = get_basket(request)
     ctx = {
         "shop": shop,
-        "product": products,
+        "products": products,
     }
     ctx.update(cart_data)
     return render(request, 'user/user_main.html', ctx)
