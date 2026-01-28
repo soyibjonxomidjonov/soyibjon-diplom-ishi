@@ -3,10 +3,12 @@ from shops_app.views import form_view, main
 
 
 urlpatterns = [
-    path('', main.main_page, name='login'),
+    path('', main.main_page, name='main_page'),
     path('login/', form_view.login, name='login'),
+    path('register/', form_view.register, name='register'),
     path('logout/', form_view.logout_page, name="logout_page"),
-    path('product/', form_view.product, name='product'),
+    path('product_add/', form_view.product_add, name='product_add'),
+    path('shop_add/', form_view.shop_add, name='shop_add'),
 ]
 
 

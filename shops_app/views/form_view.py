@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from shops_app.forms import LoginForm, ProductForm
+from shops_app.forms import LoginForm, ProductForm, ShopForm, UserForm
 from shops_app.forms import User
 from shops_app.services.decorators import login_decorator, logout_def
 from shops_app.models import Shop
@@ -27,30 +27,99 @@ def login(request):
     return render(request, "forms/login.html", {'form': form})
 
 
+
 @login_decorator
-def product(request):
+def product_add(request):
     owner_shops = Shop.objects.filter(owner=request.my_user)
     if not owner_shops.exists():
         return HttpResponse("Sizda do'kon mavjud emas. Iltimos, avval do'kon yarating.")
     if request.method == "POST":
-        form = ProductForm(request.POST, request.FILES)
-        selected_shop_id = request.POST.get('shop_id')
-        if form.is_valid() and selected_shop_id:
-            information = form.save(commit=False)
-            user_shop = Shop.objects.filter(id=selected_shop_id).first()
-            if user_shop:
-                information.shop = user_shop
-
-                information.save()
-                return HttpResponse("""Product muvaffaqiyatli qo'shildi!""")
-            else:
-                return HttpResponse("Xatolik: Bu do'kon sizga tegishli emas!")
+        form = ProductForm(request.POST, request.FILES, user=request.my_user)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+        else:
+            print(form.errors)
     else:
-        form = ProductForm()
+        form = ProductForm(user=request.my_user)
 
     return render(request, "forms/product.html", {'form': form, 'owner_shops': owner_shops})
+
+
+
+
+
+@login_decorator
+def shop_add(request):
+    if request.method == "POST":
+        form = ShopForm(request.POST, request.FILES)
+        if form.is_valid():
+            shop = form.save(commit=False)
+            shop.owner = request.my_user
+            shop.save()
+            return redirect('/')
+        else:
+            print(form.errors)
+    else:
+        form = ShopForm()
+
+    return render(request, "forms/product.html", {'form': form})
+
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+        else:
+            print(form.errors)
+    else:
+        form = UserForm()
+
+    return render(request, 'forms/register.html', {'form': form})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def logout_page(request):
     logout_def(request)
     return redirect("login")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,94 +1,200 @@
-{% extends 'form_base.html' %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahsulot Qo'shish | Cyber Market</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-cyan: #00f2ff;
+            --neon-violet: #bc13fe;
+            --bg-dark: #020617;
+        }
 
-{% block title %}Mahsulot Qo'shish | Cyber Market{% endblock %}
+        body {
+            background-color: var(--bg-dark);
+            background-image: url('https://w0.peakpx.com/wallpaper/429/180/HD-wallpaper-night-stars-mountains-sky-cosmos.jpg');
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: 'Rajdhani', sans-serif;
+        }
 
-{% block head_title %}Yangi maxsulot{% endblock %}
+        .product-container {
+            background: rgba(15, 23, 42, 0.95);
+            width: 700px;
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            box-shadow: 0 0 40px rgba(0, 242, 255, 0.2);
+            backdrop-filter: blur(10px);
+            margin: 20px;
+        }
 
-{% block content %}
-<div class="cyber-card wide-card">
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-cyan);
+            text-align: center;
+            font-size: 24px;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
 
-        <div class="field-wrapper">
-            <label>Qaysi do'koningizga qo'shilsin?</label>
-            <select name="shop_id" class="cyber-select" required>
-                {% for shop in owner_shops %}
-                    <option value="{{ shop.id }}">{{ shop.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
+        .product-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
 
-        <div class="product-grid">
-            {% for field in form %}
-                <div class="field-wrapper {% if field.name == 'description' %}full-width{% endif %}">
-                    <label>{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}
-                        <span class="error-msg">{{ field.errors.0 }}</span>
+        .full-width { grid-column: span 2; }
+
+        .field-wrapper { display: flex; flex-direction: column; position: relative; }
+
+        .field-wrapper label.title {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Umumiy inputlar */
+        .field-wrapper input, .field-wrapper select, .field-wrapper textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(15, 23, 42, 0.6) !important;
+            border: 1px solid rgba(0, 242, 255, 0.2) !important;
+            border-radius: 10px;
+            color: white !important;
+            font-size: 16px;
+            font-family: 'Rajdhani', sans-serif;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        /* SELECT DIZAYNI */
+        .custom-select-wrapper { position: relative; display: flex; align-items: center; }
+        .custom-select-wrapper select { appearance: none; cursor: pointer; }
+        .custom-select-wrapper select option { background: #0f172a; color: white; }
+        .select-arrow {
+            position: absolute; right: 15px;
+            width: 0; height: 0;
+            border-left: 6px solid transparent; border-right: 6px solid transparent;
+            border-top: 6px solid var(--neon-cyan); pointer-events: none;
+        }
+
+        /* FILE INPUT DIZAYNI (MUHIM!) */
+        .file-upload-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 80px;
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; cursor: pointer; z-index: 10; /* Eng ustida */
+        }
+
+        .file-label {
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(0, 242, 255, 0.05);
+            border: 2px dashed rgba(0, 242, 255, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            color: var(--neon-cyan);
+            transition: 0.3s;
+            font-weight: 600;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .file-upload-wrapper:hover .file-label {
+            border-color: var(--neon-cyan);
+            background: rgba(0, 242, 255, 0.1);
+        }
+
+        .save-btn {
+            width: 100%; padding: 18px; margin-top: 25px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-violet));
+            border: none; border-radius: 12px;
+            color: white; font-family: 'Orbitron', sans-serif;
+            font-weight: 700; font-size: 16px;
+            cursor: pointer; text-transform: uppercase;
+            letter-spacing: 3px; transition: 0.4s;
+        }
+
+        .save-btn:hover {
+            box-shadow: 0 0 30px rgba(188, 19, 254, 0.6);
+            transform: translateY(-2px);
+        }
+
+        textarea { resize: none; height: 100px; }
+    </style>
+</head>
+<body>
+
+    <div class="product-container">
+        <h2>Add product</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="product-form-grid">
+                {% for field in form %}
+                    {% if field.name == 'shop' %}
+                        <div class="field-wrapper full-width">
+                            <label class="title">Choose a store</label>
+                            <div class="custom-select-wrapper">
+                                {{ field }}
+                                <div class="select-arrow"></div>
+                            </div>
+                        </div>
+                    {% elif field.name == 'image' %}
+                        <div class="field-wrapper full-width">
+                            <label class="title">Product image</label>
+                            <div class="file-upload-wrapper">
+                                {{ field }} <div class="file-label" id="file-visual">
+                                    <span id="file-text">⚡ Image upload (PNG, JPG)</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="field-wrapper {% if field.name == 'description' %}full-width{% endif %}">
+                            <label class="title">{{ field.label }}</label>
+                            {{ field }}
+                        </div>
                     {% endif %}
-                </div>
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
 
-        <button type="submit" class="action-btn">MAHSULOTNI SAQLASH</button>
-    </form>
-
-    <div class="footer-link">
-        <a href="/dashboard/">← Dashboardga qaytish</a>
+            <button type="submit" class="save-btn">Save</button>
+        </form>
     </div>
-</div>
 
-<style>
-    /* Mahsulot uchun formani kengaytiramiz */
-    .wide-card {
-        width: 650px !important; /* "Ozg'in" formadan ko'ra kengroq */
-        max-width: 95%;
-    }
+    <script>
+        // Rasm tanlanganda vizual qismini yangilash
+        const fileInput = document.querySelector('input[type="file"]');
+        const fileVisual = document.getElementById('file-visual');
+        const fileText = document.getElementById('file-text');
 
-    /* Inputlarni 2 ustunga bo'lamiz */
-    .product-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr; /* 50/50 bo'lish */
-        gap: 15px 25px;
-        margin-top: 20px;
-    }
-
-    /* Description (textarea) butun kenglikni egallashi uchun */
-    .full-width {
-        grid-column: span 2;
-    }
-
-    /* Bizning maxsus select dizaynimiz */
-    .cyber-select {
-        width: 100%;
-        padding: 12px;
-        background: rgba(0, 242, 255, 0.05);
-        border: 1px solid rgba(0, 242, 255, 0.3);
-        border-radius: 10px;
-        color: #00f2ff;
-        font-family: 'Rajdhani', sans-serif;
-        font-size: 16px;
-        outline: none;
-        cursor: pointer;
-    }
-
-    .cyber-select option {
-        background: #0f172a;
-        color: white;
-    }
-
-    .error-msg {
-        color: #ff4d4d;
-        font-size: 12px;
-        margin-top: 5px;
-        display: block;
-    }
-
-    /* Rasm yuklash (File input) tugmasini to'g'irlash */
-    input[type="file"] {
-        padding: 10px;
-        font-size: 14px;
-        color: #94a3b8;
-    }
-</style>
-{% endblock %}
+        if(fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                if(e.target.files.length > 0) {
+                    fileText.innerText = "✅ TANLANDI: " + e.target.files[0].name;
+                    fileVisual.style.borderColor = "#bc13fe";
+                    fileVisual.style.color = "#bc13fe";
+                    fileVisual.style.background = "rgba(188, 19, 254, 0.1)";
+                }
+            });
+        }
+    </script>
+</body>
+</html>

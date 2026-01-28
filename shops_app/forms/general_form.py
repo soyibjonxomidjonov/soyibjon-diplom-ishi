@@ -20,9 +20,15 @@ class ShopForm(forms.ModelForm):
 
 
 class ProductForm(forms.ModelForm):
+    shop = forms.ModelChoiceField(
+        queryset=Shop.objects.none(),
+        label='Shops',
+        widget=forms.Select(attrs={'class': 'cyber-input'})
+    )
+
     class Meta:
         model = Product
-        fields = ['name', 'price', 'description', 'image', 'stock', 'unity']
+        fields = ['name', 'price', 'shop', 'description', 'image', 'stock', 'unity']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'price': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -32,6 +38,13 @@ class ProductForm(forms.ModelForm):
             'unity': forms.Select(attrs={'class': 'form-control'}),
 
         }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(ProductForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['shop'].queryset = Shop.objects.filter(owner=user)
+
 
 
 class OrderForm(forms.ModelForm):

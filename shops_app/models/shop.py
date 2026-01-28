@@ -19,4 +19,4 @@ class Shop(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.owner.first_name}ning  '{self.name}' do'koni"
+        return f"{self.name}"
