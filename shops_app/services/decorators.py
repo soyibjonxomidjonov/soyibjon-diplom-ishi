@@ -7,13 +7,13 @@ def login_decorator(view_func):
         user_id = request.session.get('user_id')
 
         if not user_id:
-            return redirect('login')
+            return redirect(f'/login/?next={request.path}')
 
         try:
             request.my_user = User.objects.get(id=user_id)
 
         except User.DoesNotExist:
-            return redirect('login')
+            return redirect(f'/login/?next={request.path}')
 
         return view_func(request, *args, **kwargs)
 

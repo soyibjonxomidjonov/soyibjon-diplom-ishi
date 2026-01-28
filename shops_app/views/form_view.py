@@ -17,9 +17,8 @@ def login(request):
                 baza_user = User.objects.get(username=forma_user)
                 if str(baza_user.password) == str(forma_password):
                     request.session["user_id"] = baza_user.id
-                    return HttpResponse("""Siz muvofaqqiyatli login qildingiz!
-        <a href='/logout/'>Tizimdan chiqish</a> <br>
-        <a href='/'>Asosiy sahifa</a>""")
+                    next_url = request.GET.get('next', '/')
+                    return redirect(next_url)
             except User.DoesNotExist:
                 return redirect('login')
     else:
