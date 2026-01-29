@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from shops_app.forms import OrderForm
 from shops_app.models import Shop, Product
 from shops_app.services.services import get_basket
 
@@ -29,8 +31,50 @@ def view_product_page(request, shop_slug, product_id):
 
 
 
+def order_save_page(request, shop_slug):
+    basket = get_basket(request)
+    now_shop = get_object_or_404(Shop, slug=shop_slug)
 
+    if request.method == "POST":
+        form = OrderForm(request.POST, request.FILES)
 
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.shop = now_shop
+
+            if not basket['cart_items']:
+                return redirect('shop', shop_slug=shop_slug)
+
+            save_items = []
+
+            for item in basket['cart_items']:
+                save_items.append({
+                    'product_name': item['product'].name,
+                    'price': float(item['product'].price),
+                    'quantity': item['quantity'],
+                    'item_total': float(item['item_total']),
+                })
+
+            order.items_json = save_items
+            order.total_price = basket['total_price']
+
+            order.save()
+            request.session['basket'] = {}
+            messages.success(request, f"Buyurtmangiz '{now_shop.name.title()}' do'koni tomonidan qabul qilindi!")
+            return redirect('shop', shop_slug=shop_slug)
+        else:
+            print(form.errors)
+    else:
+        form = OrderForm()
+
+    ctx = {
+        'form': form,
+        'shop': now_shop,
+        'cart_items': basket['cart_items'],
+        'total_price': basket['total_price'],
+    }
+
+    return render(request, 'user/user_order.html', ctx)
 
 
 

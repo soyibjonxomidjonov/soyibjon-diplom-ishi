@@ -16,7 +16,7 @@ urlpatterns = [
 
     # Project User-view urls
     path('shop/<slug:shop_slug>/<int:product_id>/', user_view.view_product_page, name='shop_product'),
-    path('shop/<slug:shop_slug>/order', form_view.shop_add, name='shop_order'),
+    path('shop/<slug:shop_slug>/order/', user_view.order_save_page, name='order_save_page'),
     path('shop/<slug:shop_slug>/', user_view.view_shop_page, name='shop'),
 
     # Basket + and - url

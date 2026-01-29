@@ -1,10 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyurtma Rasmiylashtirish | Cyber Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #0a0a0c; color: white; font-family: 'Inter', sans-serif; }
+        .cyber-card { background: #111114; border: 1px solid #1f2937; border-radius: 24px; }
+        .neon-text { color: #00f2ff; text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
+        input, textarea {
+            width: 100%; background: #0a0a0c !important; border: 1px solid #1f2937 !important;
+            border-radius: 12px !important; padding: 12px 15px !important; color: white !important; outline: none !important;
+        }
+        input:focus { border-color: #00f2ff !important; box-shadow: 0 0 10px rgba(0, 242, 255, 0.2) !important; }
+    </style>
 </head>
-<body>
+<body class="p-4 md:p-10">
 
+    <div class="max-w-6xl mx-auto">
+        <div class="flex justify-between items-center mb-10">
+            <a href="{% url 'shop' shop.slug %}" class="flex items-center gap-2 text-gray-500 hover:text-cyan-400 transition">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span class="text-xs font-black uppercase tracking-widest">Orqaga</span>
+            </a>
+            <h1 class="text-2xl font-black italic uppercase neon-text italic">Buyurtma berish</h1>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+            <div class="space-y-6">
+                <h2 class="text-sm font-black text-gray-500 uppercase tracking-widest">Sizning tanlovingiz</h2>
+
+                <div id="order-items-list" class="space-y-4">
+                    {% for item in cart_items %}
+                    <div class="cyber-card p-5 flex items-center gap-4 relative overflow-hidden group">
+                        <a href="{% url 'shop_product' shop.slug item.product.id %}" class="w-20 h-20 flex-shrink-0">
+                            <img src="{{ item.product.image.url }}" class="w-full h-full object-cover rounded-xl border border-gray-800 group-hover:border-cyan-500 transition">
+                        </a>
+
+                        <div class="flex-grow">
+                            <a href="{% url 'shop_product' shop.slug item.product.id %}" class="block font-bold text-lg hover:text-cyan-400 transition uppercase italic">
+                                {{ item.product.name }}
+                            </a>
+                            <div class="text-cyan-400 font-black text-sm mt-1">{{ item.product.price }} so'm</div>
+
+                            <div class="flex items-center gap-4 mt-3">
+                                <div class="flex items-center bg-black rounded-lg border border-gray-800">
+                                    <button onclick="updateOrderQty('remove', '{{ item.product.id }}')" class="px-3 py-1 text-cyan-400 hover:bg-cyan-500/10">-</button>
+                                    <span class="px-4 font-bold text-sm border-x border-gray-800">{{ item.quantity }}</span>
+                                    <button onclick="updateOrderQty('add', '{{ item.product.id }}', {{ item.product.stock }}, {{ item.quantity }})" class="px-3 py-1 text-cyan-400 hover:bg-cyan-500/10">+</button>
+                                </div>
+                                <span class="text-xs text-gray-600 font-bold uppercase">Jami: {{ item.item_total }} so'm</span>
+                            </div>
+                        </div>
+
+                        <button onclick="updateOrderQty('delete', '{{ item.product.id }}')" class="p-2 text-gray-700 hover:text-red-500 transition">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="cyber-card p-6 border-dashed border-cyan-500/30">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-500 font-bold uppercase text-xs">Umumiy hisob:</span>
+                        <span class="text-3xl font-black neon-text">{{ total_price }} so'm</span>
+                    </div>
+                </div>
+            </div>
+
+<div class="bg-[#111114] p-8 rounded-[32px] border border-gray-800 shadow-2xl">
+    <h2 class="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-10 ml-2 italic">
+        Yetkazib berish ma'lumotlari
+    </h2>
+
+<form method="POST" class="space-y-8">
+    {% csrf_token %}
+
+    <div class="space-y-2">
+        <label class="block text-[10px] font-black text-cyan-400 uppercase tracking-widest ml-4">
+            To'liq ismingiz
+        </label>
+        <input type="text" name="first_name" required
+            class="w-full bg-black border border-gray-800 rounded-2xl py-4 px-6 text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all outline-none"
+            placeholder="Masalan: Soyibjon Jabborov">
+    </div>
+
+    <div class="space-y-2">
+        <label class="block text-[10px] font-black text-cyan-400 uppercase tracking-widest ml-4">
+            Telefon raqamingiz
+        </label>
+        <input type="text" name="phone_number" required
+            class="w-full bg-black border border-gray-800 rounded-2xl py-4 px-6 text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all outline-none"
+            placeholder="+998 90 123 45 67">
+    </div>
+
+    <div class="space-y-2">
+        <label class="block text-[10px] font-black text-cyan-400 uppercase tracking-widest ml-4">
+            Email / Telegram
+        </label>
+        <input type="text" name="email" required
+            class="w-full bg-black border border-gray-800 rounded-2xl py-4 px-6 text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all outline-none"
+            placeholder="@username yoki email">
+    </div>
+
+    <div class="pt-6">
+        <button type="submit"
+            class="w-full bg-green-600 hover:bg-green-500 text-white font-black py-5 rounded-2xl transition-all transform active:scale-95 shadow-[0_0_30px_rgba(22,163,74,0.2)] uppercase tracking-[0.2em] text-xs">
+            Buyurtmani tasdiqlash
+        </button>
+    </div>
+</form>
+</div>
+
+        </div>
+    </div>
+
+    <script>
+        function updateOrderQty(action, pId, stock, current) {
+            if (action === 'add' && current >= stock) { alert("Omborda boshqa qolmadi!"); return; }
+
+            let url = `/shop/{{ shop.slug }}/`;
+            if (action === 'add') url += `add-to-basket/${pId}/`;
+            else if (action === 'remove') url += `remove/${pId}/`;
+            else if (action === 'delete') url += `delete/${pId}/`;
+
+            fetch(url, { headers: {'X-Requested-With':'XMLHttpRequest'} })
+            .then(() => location.reload()); // Sahifani yangilab ma'lumotlarni yangilaymiz
+        }
+    </script>
+<h1 class="text-2xl font-black italic uppercase neon-text italic">
+    {{ shop.name }} <span class="text-gray-600 text-sm">| Order</span>
+</h1>
+
+<button type="submit" id="submit-btn" class="...">
+    Buyurtmani tasdiqlash
+</button>
+
+<script>
+    // Forma yuborilayotganda tugmani o'zgartirish
+    document.querySelector('form').onsubmit = function() {
+        const btn = document.getElementById('submit-btn');
+        btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> YUBORILMOQDA...';
+        btn.style.opacity = '0.7';
+        btn.style.pointerEvents = 'none';
+    };
+</script>
 </body>
 </html>

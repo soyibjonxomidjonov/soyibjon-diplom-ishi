@@ -156,9 +156,11 @@
                     <span class="text-2xl font-black text-cyan-400">{{ total_price }} so'm</span>
                 </div>
             </div>
-            <button class="w-full bg-green-600 hover:bg-green-500 text-white py-4 rounded-2xl font-black uppercase tracking-widest transition shadow-lg active:scale-95">
-                Buyurtma berish
-            </button>
+                <a href="{% url 'order_save_page' shop.slug %}" class="block w-full">
+                    <button type="button" class="w-full bg-green-600 hover:bg-green-500 text-white py-4 rounded-2xl font-black uppercase tracking-widest transition shadow-lg active:scale-95">
+                        Buyurtma berish
+                    </button>
+                </a>
             {% endif %}
         </div>
     </div>
@@ -230,5 +232,28 @@
             });
         });
     </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    {% if messages %}
+        {% for message in messages %}
+            Swal.fire({
+                title: 'MUVAFFAQIYATLI!',
+                text: "{{ message|safe }} Tez orada siz bilan aloqaga chiqamiz.",                icon: 'success',
+                background: '#111114',
+                color: '#fff',
+                confirmButtonColor: '#00f2ff',
+                confirmButtonText: 'TUSHUNARLI',
+                backdrop: `rgba(0,242,255,0.1)`,
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+            });
+        {% endfor %}
+    {% endif %}
+</script>
 </body>
 </html>
