@@ -1,5 +1,5 @@
 from django.urls import path
-from shops_app.views import form_view, main, login, user_view
+from shops_app.views import form_view, main, login, user_view, basket_view
 
 
 urlpatterns = [
@@ -15,10 +15,15 @@ urlpatterns = [
     path('shop_add/', form_view.shop_add, name='shop_add'),
 
     # Project User-view urls
-    path('shop/<slug:shop_slug>/add-to-basket/<int:product_id>/', user_view.add_to_basket, name='add_to_basket'),
     path('shop/<slug:shop_slug>/<int:product_id>/', user_view.view_product_page, name='shop_product'),
     path('shop/<slug:shop_slug>/order', form_view.shop_add, name='shop_order'),
     path('shop/<slug:shop_slug>/', user_view.view_shop_page, name='shop'),
+
+    # Basket + and - url
+    path('shop/<slug:shop_slug>/add-to-basket/<int:product_id>/', basket_view.add_to_basket, name='add_to_basket'),
+    path('shop/<slug:shop_slug>/remove/<int:product_id>/', basket_view.remove_basket, name='remove_basket'),
+    path('shop/<slug:shop_slug>/delete/<int:product_id>/', basket_view.delete_product, name='delete_product'),
+    path('shop/<slug:shop_slug>/clear/', basket_view.clear_basket, name='clear_basket'),
 
 ]
 

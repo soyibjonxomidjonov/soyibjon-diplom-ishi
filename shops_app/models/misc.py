@@ -1,5 +1,4 @@
 from django.db import models
-from .product import Product
 from .shop import Shop
 
 class Order(models.Model):

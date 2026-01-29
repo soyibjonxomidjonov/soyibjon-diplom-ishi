@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from shops_app.models import Shop, Product
 from shops_app.services.services import get_basket
-from django.http import JsonResponse
+
+
 
 def view_shop_page(request, shop_slug):
     shop = get_object_or_404(Shop, slug=shop_slug)
@@ -28,19 +29,6 @@ def view_product_page(request, shop_slug, product_id):
 
 
 
-def add_to_basket(request, shop_slug, product_id):
-    shop = get_object_or_404(Shop, slug=shop_slug)
-    basket = request.session.get('basket', {})
-    p_id = str(product_id)
-    if p_id in basket:
-        basket[p_id] += 1
-    else:
-        basket[p_id] = 1
-
-    request.session['basket'] = basket
-    request.session.modified = True
-
-    return JsonResponse({'status': 'ok', 'cart_count': len(basket)})
 
 
 
