@@ -76,24 +76,24 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql', #bu postgres ulanish
-#         'NAME': os.environ.get("DATABASE_NAME"),# database nomi
-#         'USER': os.environ.get('DATABASE_USER'), #user nomi
-#         'PASSWORD': os.environ.get('USER_PASSWORD'), #user paroli
-#         'HOST': os.environ.get("DATABASE_HOST", "127.0.0.1"), #bu yerda host beriladi
-#         'PORT': os.environ.get('PORT'), #va post yoziladi va tayyor
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql', #bu postgres ulanish
+        'NAME': os.environ.get("DATABASE_NAME"),# database nomi
+        'USER': os.environ.get('DATABASE_USER'), #user nomi
+        'PASSWORD': os.environ.get('USER_PASSWORD'), #user paroli
+        'HOST': os.environ.get("DATABASE_HOST", "127.0.0.1"), #bu yerda host beriladi
+        'PORT': os.environ.get('PORT'), #va post yoziladi va tayyor
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -139,4 +139,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #bunda media papka nomi
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  #bunda media papka nomi
+
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL") # RabbitMQ yoki Redis URL manzili
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND") #Redis yoki boshqa natija

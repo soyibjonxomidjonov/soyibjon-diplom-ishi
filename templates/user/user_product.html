@@ -130,9 +130,12 @@
                     <span class="text-2xl font-black text-cyan-400">{{ total_price }} so'm</span>
                 </div>
             </div>
-            <button class="w-full bg-green-600 hover:bg-green-500 text-white py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition active:scale-95">
-                Buyurtma berish
-            </button>
+
+            <a href="{% url 'order_save_page' shop.slug %}" class="block w-full">
+                <button type="button" class="w-full bg-green-600 hover:bg-green-500 text-white py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition active:scale-95">
+                    Buyurtma berish
+                </button>
+            </a>
             {% endif %}
         </div>
     </div>

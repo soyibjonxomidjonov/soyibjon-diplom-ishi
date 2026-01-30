@@ -52,15 +52,15 @@ def order_save_page(request, shop_slug):
                     'product_name': item['product'].name,
                     'price': float(item['product'].price),
                     'quantity': item['quantity'],
+                    "unity": item['product'].unity,
                     'item_total': float(item['item_total']),
                 })
 
             order.items_json = save_items
             order.total_price = basket['total_price']
-
             order.save()
             request.session['basket'] = {}
-            messages.success(request, f"Buyurtmangiz '{now_shop.name.title()}' do'koni tomonidan qabul qilindi!")
+            messages.success(request, f"Buyurtmangiz {now_shop.name.title()} do'koni tomonidan qabul qilindi!")
             return redirect('shop', shop_slug=shop_slug)
         else:
             print(form.errors)

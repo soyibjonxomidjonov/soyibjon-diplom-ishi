@@ -13,7 +13,6 @@ class Shop(models.Model):
     slug = models.CharField(max_length=200, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(f"{self.owner.username}-{self.name}")
