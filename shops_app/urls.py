@@ -1,5 +1,6 @@
 from django.urls import path
 from shops_app.views import form_view, main, login, user_view, basket_view
+from . import signals
 
 
 urlpatterns = [
