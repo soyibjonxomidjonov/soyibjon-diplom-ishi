@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -90,7 +90,7 @@ DATABASES = {
         'NAME': os.environ.get("DATABASE_NAME"),# database nomi
         'USER': os.environ.get('DATABASE_USER'), #user nomi
         'PASSWORD': os.environ.get('USER_PASSWORD'), #user paroli
-        'HOST': os.environ.get("DATABASE_HOST", "127.0.0.1"), #bu yerda host beriladi
+        'HOST': 'db', #bu yerda host beriladi
         'PORT': os.environ.get('PORT'), #va post yoziladi va tayyor
     }
 }

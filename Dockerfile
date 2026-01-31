@@ -1,6 +1,6 @@
 # Use the official Python image from the Docker Hup
 
-FROM python:3.9
+FROM python:3.10-slim
 #Bunda pythonni kerakli versiyasi yoziladi
 
 #Ser environment variables
@@ -15,6 +15,8 @@ WORKDIR /app
 
 COPY requirements.txt .
 # Bunda requirments.txt nusxa olib contaninerga tashlanadi
+RUN pip install --upgrade pip  # <--- Buni qoshing
+RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 # Shunday qilib o'rnatiladi
 

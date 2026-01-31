@@ -31,7 +31,7 @@ def send_telegram_notification(order_id, products, customer, phone_number, addre
                 "text": message_text
             }
         ).json()
-        res_data = response.json()
+        res_data = response
         print(f"Telegram javobi: {res_data}")  # Nima bo'layotganini ko'rish uchun
         if not res_data.get('ok'):
             print(f"Telegram yubormadi: {res_data.get('description')}")
