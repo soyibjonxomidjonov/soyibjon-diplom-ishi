@@ -1,5 +1,5 @@
-from django.shortcuts import redirect, render
-from shops_app.models import User
+from django.shortcuts import redirect
+from apps.shops_app.models import User
 
 
 def login_decorator(view_func):

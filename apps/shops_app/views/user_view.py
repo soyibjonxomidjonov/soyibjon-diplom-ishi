@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from shops_app.forms import OrderForm
-from shops_app.models import Shop, Product
-from shops_app.services.services import get_basket
-
-
+from apps.shops_app.forms import OrderForm
+from apps.shops_app.models import Shop, Product
+from apps.shops_app.services.services import get_basket
+from apps.shops_app import signals
 
 def view_shop_page(request, shop_slug):
     shop = get_object_or_404(Shop, slug=shop_slug)

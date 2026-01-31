@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from shops_app.forms import LoginForm, UserForm
-from shops_app.forms import User
-from shops_app.services.decorators import logout_def
+from apps.shops_app.forms import LoginForm, UserForm
+from apps.shops_app.forms import User
+from apps.shops_app.services.decorators import logout_def
 
 
 def login(request):

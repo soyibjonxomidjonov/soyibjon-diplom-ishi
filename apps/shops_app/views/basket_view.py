@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 
-from shops_app.models import Shop
+from apps.shops_app.models import Shop
 
 
 

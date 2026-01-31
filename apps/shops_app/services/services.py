@@ -1,4 +1,4 @@
-from shops_app.models import Product
+from apps.shops_app.models import Product
 
 
 def get_basket(request):

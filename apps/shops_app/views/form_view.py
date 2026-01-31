@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from shops_app.forms import ProductForm, ShopForm
-from shops_app.services.decorators import login_decorator
-from shops_app.models import Shop
+from apps.shops_app.forms import ProductForm, ShopForm
+from apps.shops_app.services.decorators import login_decorator
+from apps.shops_app.models import Shop
 
 
 

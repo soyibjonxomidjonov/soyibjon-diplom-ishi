@@ -1,5 +1,5 @@
 from django import forms
-from shops_app.models import User
+from apps.shops_app.models import User
 
 
 
