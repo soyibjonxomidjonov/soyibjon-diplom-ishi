@@ -10,7 +10,7 @@ class Shop(models.Model):
     address = models.CharField(max_length=300, blank=True, null=True)
     bot_token = models.CharField(max_length=500, blank=True, null=True)
     chat_id = models.CharField(max_length=100, blank=True, null=True)
-    slug = models.CharField(max_length=200, blank=True, null=True)
+    slug = models.CharField(max_length=200, blank=True, null=True, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
