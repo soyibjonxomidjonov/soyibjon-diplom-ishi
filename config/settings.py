@@ -183,7 +183,7 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-# Jwt yangi versiyaga o'tkazildi
+# Jwt yangi versiyaga o'tkazildi 2 bor
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
