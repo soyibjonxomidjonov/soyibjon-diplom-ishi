@@ -175,10 +175,15 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120), # 1 soat yetadi
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),    # 2 kun
+    'ROTATE_REFRESH_TOKENS': True,                  # Refresh ishlatilganda yangisini beradi
+    'BLACKLIST_AFTER_ROTATION': True,               # Eskisini yaroqsiz qiladi
     'ALGORITHM': 'HS256',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=60),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1)
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+# Jwt yangi versiyaga o'tkazildi
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
