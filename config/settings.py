@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
+import sys
 from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
@@ -27,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
-
+# DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
@@ -50,9 +51,17 @@ INSTALLED_APPS = [
     'djoser',
     'drf_yasg',
     'django_filters',
+#     react uchun corsheaders
+    'corsheaders',
+#     Site map uchun applar
+    'django.contrib.sitemaps',
+    'django.contrib.sites',
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+#     for react settings
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -103,6 +112,11 @@ DATABASES = {
         'PORT': os.environ.get('PORT'), #va post yoziladi va tayyor
     }
 }
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',
+    }
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -196,6 +210,35 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': 'username/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
+    'SEND_ACTIVATION_EMAIL': False,
     'SERIALIZERS': {},
 }
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://shops-platform.uz",
+    "https://www.shops-platform.uz",
+    "http://localhost:8080",  # ← shu qatorni qo'shing
+
+]
+
+# CORS_ALLOW_ALL_ORIGINS = True
+
+# Site map
+SITE_ID = 1
+
+
+# Bunda csrf uchun kerakli domenlar qo'shildi va ishlatishga tayyor
+CSRF_TRUSTED_ORIGINS = [
+    'https://shops-platform.uz',
+    'https://www.shops-platform.uz',
+]
+
+# sitemap uchun kerakli sozlamalar
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Bu qo'shimcha odatda urlga kirganda / bo'lmasa unga o'zi slash qo'yib beradi
+APPEND_SLASH = True
+
+

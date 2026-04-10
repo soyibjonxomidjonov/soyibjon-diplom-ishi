@@ -13,7 +13,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from apps.api.views import ProductViewSet, OrderViewSet, ShopViewSet, UserViewSet
-
+from apps.api.views import public_shop_by_slug, public_products_by_shop
 
 class JWTSchemaGenerator(OpenAPISchemaGenerator):
 
@@ -39,13 +39,14 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=[permissions.AllowAny],
     generator_class=JWTSchemaGenerator,
+    url='https://shops-platform.uz/',
 )
 
 router = DefaultRouter()
-router.register(r'products', ProductViewSet)
-router.register(r'orders', OrderViewSet)
-router.register(r'users', UserViewSet)
-router.register(r'shops', ShopViewSet)
+router.register(r'products', ProductViewSet, basename='products')
+router.register(r'orders', OrderViewSet, basename='orders')
+router.register(r'users', UserViewSet, basename='users')
+router.register(r'shops', ShopViewSet, basename='shops')
 
 urlpatterns = [
     path('v1/', include(router.urls)),
@@ -67,3 +68,4 @@ urlpatterns = [
 
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name="schema-redoc"),
 ]
+

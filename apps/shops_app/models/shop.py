@@ -1,7 +1,7 @@
 from django.db import models
 from .user import User
 from django.utils.text import slugify
-
+from django.urls import reverse
 
 class Shop(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owners")
@@ -10,7 +10,7 @@ class Shop(models.Model):
     address = models.CharField(max_length=300, blank=True, null=True)
     bot_token = models.CharField(max_length=500, blank=True, null=True)
     chat_id = models.CharField(max_length=100, blank=True, null=True)
-    slug = models.CharField(max_length=200, blank=True, null=True)
+    slug = models.CharField(max_length=200, blank=True, null=True, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
@@ -20,3 +20,6 @@ class Shop(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    def get_absolute_url(self):
+        return reverse('shop', kwargs={'shop_slug': self.slug})
